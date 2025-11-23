@@ -2,11 +2,7 @@ import { AsyncLocalStorage } from "node:async_hooks";
 import { AuthenticatedUser } from "../types/states/user";
 import { AppError } from "./app-error";
 import { StatusCodes, StatusMessages } from "../types/common/status-codes";
-
-export interface RequestContext {
-  requestId: string;
-  user: AuthenticatedUser | null;
-}
+import { RequestContext } from "../types/utils/async-context";
 
 export class AsyncContext {
   private static asyncLocalStorage = new AsyncLocalStorage<RequestContext>();
