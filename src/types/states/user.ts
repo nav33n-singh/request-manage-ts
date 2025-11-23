@@ -2,7 +2,6 @@ export interface AuthenticatedUser {
   id: number;
   email: string;
   userName: string;
-  role: string | null;
   mobileNo: string | null;
   phoneCode: string | null;
 }
@@ -12,13 +11,17 @@ export interface AuthenticateUserCommand {
   password: string;
 }
 
-export interface User {
+export interface UserMeta {
   id: number;
   firstName: string;
   middleName: string | null;
   lastName: string | null;
-  userName: string;
   email: string;
+}
+
+export interface User extends UserMeta {
+  userName: string;
   mobileNo: string | null;
   phoneCode: string | null;
 }
+

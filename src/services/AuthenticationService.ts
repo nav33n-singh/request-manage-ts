@@ -37,7 +37,6 @@ export class AuthenticationService implements IAppAuthenticationService {
       id: decoded.id,
       email: decoded.email,
       userName: decoded.userName,
-      role: decoded.role,
       mobileNo: decoded.mobileNo,
       phoneCode: decoded.phoneCode
     }
@@ -56,7 +55,6 @@ export class AuthenticationService implements IAppAuthenticationService {
       email: user.Email,
       mobileNo: user.MobileNo || '',
       phoneCode: user.PhoneCode || '',
-      role: null,
     }
     const signedJWT = this.signJsonWebToken(authenticatedUser);
 
