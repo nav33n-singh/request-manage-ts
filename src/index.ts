@@ -1,5 +1,6 @@
 import express from 'express';
 import { json } from 'body-parser';
+import cors from 'cors';
 import { Database } from './databases'
 import { PORT } from './config'
 import { auth } from './middlewares/auth';
@@ -12,6 +13,7 @@ const databases = Database.getInstance();
 (async () => {
   try {
     const app = express();
+    app.use(cors());
     app.use(json());
 
     // establish db connection
