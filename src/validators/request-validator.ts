@@ -7,7 +7,7 @@ export const createRequestSchema = Joi.object({
 
 export const approveRejectRequestSchema = Joi.object({
   requestId: Joi.number().integer().positive().required(),
-  decision: Joi.string().valid("Approved", "Rejected").required(),
+  action: Joi.string().valid("Approved", "Rejected").required(),
   comment: Joi.string().allow(null, "").optional()
 });
 

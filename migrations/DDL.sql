@@ -59,7 +59,7 @@ CREATE TABLE assignee_manager_mappings (
   "EffectiveTo"   TIMESTAMPTZ,
   "CreatedAt"  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   "UpdatedAt"  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  "Archived"      BOOLEAN NOT NULL DEFAULT FALSE
+  "Archived"      BOOLEAN NOT NULL DEFAULT FALSE,
   
   UNIQUE ("AssigneeID", "ManagerID")
 );

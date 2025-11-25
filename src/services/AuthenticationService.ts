@@ -10,6 +10,7 @@ import { compare } from 'bcrypt';
 
 export class AuthenticationService implements IAppAuthenticationService {
   private static _instance: AuthenticationService;
+  private userRepository = new UserRepository();
   private constructor() { }
 
   async findUserByUserName(userName: string): Promise<User> {
@@ -24,27 +25,30 @@ export class AuthenticationService implements IAppAuthenticationService {
   }
 
   public async verifyJsonWebToken(token: string): Promise<AuthenticatedUser> {
-    const decoded = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload | string;
+    try {
+      const decoded = jwt.verify(token, JWT_SECRET) as jwt.JwtPayload | string;
+      if (!decoded || typeof decoded === "string") {
+        throw new AppError(StatusMessages.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
+      }
 
-    if (!decoded || typeof decoded === "string") {
+      if (!decoded.id) {
+        throw new jwt.JsonWebTokenError("Token payload missing userId");
+      }
+      const authenticatedUser: AuthenticatedUser = {
+        id: decoded.id,
+        email: decoded.email,
+        userName: decoded.userName,
+        mobileNo: decoded.mobileNo,
+        phoneCode: decoded.phoneCode
+      }
+      return authenticatedUser;
+    } catch (error) {
       throw new AppError(StatusMessages.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);
     }
-
-    if (!decoded.id) {
-      throw new jwt.JsonWebTokenError("Token payload missing userId");
-    }
-    const authenticatedUser: AuthenticatedUser = {
-      id: decoded.id,
-      email: decoded.email,
-      userName: decoded.userName,
-      mobileNo: decoded.mobileNo,
-      phoneCode: decoded.phoneCode
-    }
-    return authenticatedUser;
   }
 
   async authenticateUser(command: AuthenticateUserCommand): Promise<string> {
-    const user = await UserRepository.findByUserName(command.userName);
+    const user = await this.userRepository.findByUserName(command.userName);
     const isValidPassword = this.validatePassword(command.password, user.PasswordHash);
     if (!isValidPassword) {
       throw new AppError(StatusMessages.UNAUTHORIZED, StatusCodes.UNAUTHORIZED);

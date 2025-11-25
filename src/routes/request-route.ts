@@ -11,6 +11,7 @@ requestRouter.post("/create", validator(createRequestSchema), requestController.
 requestRouter.post("/approve", validator(approveRejectRequestSchema), requestController.approveRejectRequest);
 requestRouter.post("/close", validator(closeRequestSchema), requestController.closeRequest);
 
-requestRouter.get("/mine", validator(commonPaginationRequest), requestController.getCurrentUserRequests);
-requestRouter.get("/queue", validator(commonPaginationRequest), requestController.getQueuedRequests);
+requestRouter.post("/mine", validator(commonPaginationRequest), requestController.getCurrentUserRequests);
+requestRouter.post("/managerQueue", validator(commonPaginationRequest), requestController.getManagerQueue);
+requestRouter.post("/assigneeQueue", validator(commonPaginationRequest), requestController.getAssigneeQueue);
 

@@ -8,7 +8,7 @@ export interface CreateRequestCommand {
 
 export interface ApproveRejectRequestCommand {
   requestId: number;
-  decision:  Extract<RequestStatus, "Approved" | "Rejected">;
+  action:  Extract<RequestStatus, "Approved" | "Rejected">;
   comment: string | null;
 }
 
@@ -25,4 +25,9 @@ export interface RequestDetails {
   approver: UserMeta | null;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface PaginatedResult<T> {
+  records: T;
+  total: number
 }
