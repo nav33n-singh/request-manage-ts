@@ -1,4 +1,4 @@
 export const OPEN_ROUTES = [
-  'healthcheck',
+  'health',
   '/api/v1/auth/user/authenticate'
 ]
