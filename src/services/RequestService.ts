@@ -18,7 +18,7 @@ export class RequestService implements IAppRequestService {
   private mappingRepo = new AsigneeManagerMappingRepository();
   private auditRepo = new RequestAuditRepository();
 
-  public async getUserMetaByIDs(ids: number[]): Promise<Promise<Record<number, UserMeta>>> {
+  public async getUserMetaByIDs(ids: number[]): Promise<Record<number, UserMeta>> {
     const repoResult = await this.userRepo.findByIDs(ids);
 
     const result: Record<number, UserMeta> = {};
@@ -100,7 +100,6 @@ export class RequestService implements IAppRequestService {
 
     const updateParams = {
       Status: "Closed" as RequestStatus,
-      ApproverID: user.id
     }
     await this.repo.updateStatus(command.requestId, updateParams);
 
@@ -215,5 +214,14 @@ export class RequestService implements IAppRequestService {
       total: count || 0
     }
     return result;
+  }
+
+  async getAllAssignees(): Promise<UserMeta[]> {
+    const assigneeIds = await this.mappingRepo.getAllActiveAssignees();
+    if (assigneeIds.length === 0) {
+      return [];
+    }
+    const userMetas = await this.getUserMetaByIDs(assigneeIds);
+    return Object.values(userMetas);
   }
 }

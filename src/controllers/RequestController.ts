@@ -3,6 +3,7 @@ import { RequestService } from "../services/RequestService";
 import { CreateRequestCommand, ApproveRejectRequestCommand, CloseRequestCommand } from "../types/states/request";
 import { CommonPaginationRequest } from "../types/common/request";
 import { StatusCodes, StatusMessages } from "../types/common/status-codes";
+import { UserMeta } from "../types/states/user";
 
 export class RequestController {
   public async createRequest(request: Request, response: Response, next: NextFunction) {
@@ -96,6 +97,21 @@ export class RequestController {
       const count = Number(command.count || 20);
       const service = new RequestService();
       const data = await service.getAssigneeQueue({ page, count });
+      const result = {
+        success: true,
+        message: StatusMessages.OK,
+        data: data
+      }
+      return response.status(StatusCodes.OK).json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  public async getAllAssignees(request: Request, response: Response, next: NextFunction) {
+    try {
+      const service = new RequestService();
+      const data = await service.getAllAssignees();
       const result = {
         success: true,
         message: StatusMessages.OK,

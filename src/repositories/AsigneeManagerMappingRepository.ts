@@ -17,4 +17,14 @@ export class AsigneeManagerMappingRepository {
     }
     return parseInt(queryResult.ManagerID);
   }
+
+  async getAllActiveAssignees(): Promise<number[]> {
+    const query = this.pg("assignee_manager_mappings");
+    query.where("IsActive", true);
+    query.select("AssigneeID");
+    query.distinct("AssigneeID");
+
+    const queryResult: any[] = await query;
+    return queryResult.map(row => parseInt(row.AssigneeID));
+  }
 }
